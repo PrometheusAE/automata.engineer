@@ -7,21 +7,21 @@ export const Route = createFileRoute('/about')({
 })
 
 const certifications = [
-  { name: 'CompTIA Security+', issuer: 'CompTIA', year: '2022', status: 'Active' },
-  { name: 'CompTIA Network+', issuer: 'CompTIA', year: '2021', status: 'Active' },
-  { name: 'Fortinet NSE 4', issuer: 'Fortinet', year: '2023', status: 'Active' },
-  { name: 'CIS Controls v8 Implementation', issuer: 'CIS', year: '2023', status: 'Active' },
-  { name: 'Tailscale Certified Admin', issuer: 'Tailscale', year: '2024', status: 'Active' },
-  { name: 'Proxmox VE Administrator', issuer: 'Proxmox', year: '2023', status: 'Active' },
+  { name: 'CompTIA Network+', issuer: 'CompTIA', year: '2021', status: 'Training' },
+  { name: 'Network Security', issuer: 'Professional Development', year: '2023', status: 'Applied' },
+  { name: 'Firewall Administration', issuer: 'Professional Development', year: '2023', status: 'Applied' },
+  { name: 'CIS Controls Implementation', issuer: 'Professional Practice', year: '2025', status: 'Applied' },
+  { name: 'SIEM with Wazuh + Zeek', issuer: 'Hands-on Lab', year: '2025', status: 'Applied' },
+  { name: 'Home Lab Hybrid Infrastructure', issuer: 'Independent Practice', year: 'Current', status: 'Current' },
 ]
 
 const techStack: { category: string; items: string[] }[] = [
-  { category: 'Networking', items: ['Fortinet FortiGate', 'Cisco IOS/NX-OS', 'pfSense/OPNsense', 'VyOS', 'BGP/OSPF', 'VLAN/802.1Q'] },
-  { category: 'Security', items: ['Wazuh SIEM/XDR', 'Suricata IDS', 'OpenVAS', 'Fail2ban', 'Authelia', 'CIS Controls v8'] },
-  { category: 'Cloud & Virt', items: ['Proxmox VE', 'KVM/QEMU', 'Akamai Connected Cloud', 'Ceph Storage', 'Docker', 'LXC'] },
-  { category: 'IAM', items: ['Tailscale', 'Keycloak', 'FreeIPA', 'Passbolt', 'HashiCorp Vault', 'YubiKey/TOTP'] },
-  { category: 'Automation', items: ['Terraform', 'Ansible', 'Python', 'Bash', 'GitLab CI/CD', 'Gitea/Woodpecker'] },
-  { category: 'Observability', items: ['Zabbix', 'Prometheus', 'Grafana', 'Netbox', 'ELK Stack'] },
+  { category: 'Systems', items: ['Linux', 'Windows', 'macOS', 'Workstation Provisioning', 'Server Support', 'Backup Operations'] },
+  { category: 'Support', items: ['Technical Troubleshooting', 'Microsoft 365', 'Outlook', 'Teams', 'SharePoint', 'OneDrive'] },
+  { category: 'Identity', items: ['Entra ID', 'MFA', 'Account Provisioning', 'Mailbox Access', 'Permissions Support'] },
+  { category: 'Networking', items: ['TCP/IP', 'Network Installation', 'Network Support', 'UDM-Pro', 'Cisco Routing', 'Firewall Basics'] },
+  { category: 'Security', items: ['Wazuh', 'Zeek', 'CIS Controls', 'Security Monitoring', 'IT Emergency Response'] },
+  { category: 'Automation & Lab', items: ['Bash', 'PowerShell', 'KVM', 'FreeIPA', 'FortiGate', 'pfSense', 'Nginx', 'OCI'] },
 ]
 
 function About() {
@@ -43,11 +43,12 @@ function About() {
           </div>
           <div>
             <h2 className="font-mono font-bold text-xl text-foreground mb-1">Automata Engineer</h2>
-            <p className="text-sm text-primary font-mono mb-3">Network · Cybersecurity · Cloud Infrastructure</p>
+            <p className="text-sm text-primary font-mono mb-3">IT Support · Networking · Security Operations</p>
             <p className="text-sm text-muted-foreground leading-relaxed max-w-2xl">
-              Engineering professional specializing in enterprise networking, cybersecurity architecture, and hybrid cloud infrastructure.
-              7+ years designing and operating resilient systems with a philosophy rooted in Zero Trust principles, CIS Controls,
-              and NIST frameworks. Passionate about automation, measurable security outcomes, and self-hosted infrastructure.
+              Experienced IT support analyst with a background in network administration, troubleshooting, and security-focused
+              operational support across Linux, Windows, and macOS environments. The profile combines hands-on service desk and
+              infrastructure experience with Microsoft 365, Entra ID, CIS Controls work, and an active home lab focused on secure
+              hybrid infrastructure.
             </p>
           </div>
         </div>
@@ -60,17 +61,17 @@ function About() {
           {[
             {
               title: 'Zero Trust',
-              body: 'Trust no user, device, or network by default. Every access request is authenticated, authorized, and continuously verified regardless of network location.',
+              body: 'Security should not depend on physical location alone. Access decisions need identity verification, least privilege, and practical controls that fit operational reality.',
               color: 'text-cyan-400',
             },
             {
-              title: 'CIS Controls',
-              body: 'Prioritize security actions by impact. CIS Controls v8 provides a prescriptive, measurable roadmap from basic hygiene to advanced security operations.',
+              title: 'Operational Support',
+              body: 'Reliable IT support starts with fast troubleshooting, clear communication, and solid documentation so recurring issues become easier to solve and prevent.',
               color: 'text-emerald-400',
             },
             {
-              title: 'NIST CSF',
-              body: 'Structure security programs around Identify, Protect, Detect, Respond, and Recover. Risk-based decision making at every layer of the stack.',
+              title: 'Continuous Learning',
+              body: 'The home lab is where infrastructure, security, and automation skills are tested in practice before they are carried into production-facing work.',
               color: 'text-violet-400',
             },
           ].map(({ title, body, color }) => (
@@ -170,7 +171,7 @@ function About() {
       <div className="border border-primary/20 rounded-lg p-6 bg-primary/5 text-center">
         <Code2 className="text-primary mx-auto mb-3" size={24} />
         <h3 className="font-mono font-semibold text-foreground mb-2">Full Technical CV</h3>
-        <p className="text-sm text-muted-foreground mb-4">Download the complete CV with detailed project history, architecture diagrams, and references.</p>
+        <p className="text-sm text-muted-foreground mb-4">Request the full CV for detailed experience, training history, and references.</p>
         <a
           href="/contact"
           className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-primary-foreground rounded font-mono text-sm font-semibold hover:opacity-90 transition-opacity"

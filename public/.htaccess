@@ -1,0 +1,10 @@
+RewriteEngine On
+RewriteBase /
+
+# Serve existing files and directories directly
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# SPA fallback for TanStack Router on Hestia/Apache
+RewriteRule ^ index.html [L]

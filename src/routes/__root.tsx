@@ -1,18 +1,10 @@
-import { HeadContent, Scripts, createRootRoute, Link } from '@tanstack/react-router'
+import { Outlet, createRootRoute, Link } from '@tanstack/react-router'
 import { useState } from 'react'
 import { Menu, X, Terminal, Shield, Server, BookOpen, Wrench, User, Mail, PenSquare, Network } from 'lucide-react'
 import '../styles.css'
 
 export const Route = createRootRoute({
-  head: () => ({
-    meta: [
-      { charSet: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { title: 'Automata Engineer | Network, Security & Hybrid Cloud' },
-      { name: 'description', content: 'Engineering portfolio and service site focused on network infrastructure, cybersecurity, Zero Trust, and hybrid cloud operations.' },
-    ],
-  }),
-  shellComponent: RootDocument,
+  component: RootLayout,
 })
 
 const navItems = [
@@ -79,30 +71,24 @@ function NavBar() {
   )
 }
 
-function RootDocument({ children }: { children: React.ReactNode }) {
+function RootLayout() {
   const year = new Date().getFullYear()
 
   return (
-    <html lang="en" className="dark">
-      <head>
-        <HeadContent />
-      </head>
-      <body className="min-h-screen bg-background text-foreground">
-        <NavBar />
-        <main>
-          {children}
-        </main>
-        <footer className="border-t border-border mt-24 py-8">
-          <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <img src="/logo.png" alt="Automata Engineer" className="h-10 w-10 object-contain opacity-80" />
-              <span className="font-mono text-xs text-muted-foreground">© {year} AUTOMATA ENGINEER — Network, Security & Cloud</span>
-            </div>
-            <span className="font-mono text-xs text-muted-foreground">Zero Trust · CIS Controls · NIST Framework</span>
+    <div className="min-h-screen bg-background text-foreground dark">
+      <NavBar />
+      <main>
+        <Outlet />
+      </main>
+      <footer className="border-t border-border mt-24 py-8">
+        <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <img src="/logo.png" alt="Automata Engineer" className="h-10 w-10 object-contain opacity-80" />
+            <span className="font-mono text-xs text-muted-foreground">© {year} AUTOMATA ENGINEER — Network, Security & Cloud</span>
           </div>
-        </footer>
-        <Scripts />
-      </body>
-    </html>
+          <span className="font-mono text-xs text-muted-foreground">Zero Trust · CIS Controls · NIST Framework</span>
+        </div>
+      </footer>
+    </div>
   )
 }

@@ -20,6 +20,8 @@ const serviceTypes = [
   'Other',
 ]
 
+const CONTACT_EMAIL = 'octavio_tovar@automata.engineer'
+
 function Contact() {
   const [submitted, setSubmitted] = useState(false)
 
@@ -56,32 +58,41 @@ function Contact() {
         </p>
       </div>
 
+      <div className="mb-8 border border-cyan-400/20 rounded-lg p-4 bg-cyan-400/5">
+        <p className="text-sm font-mono text-cyan-400 font-semibold mb-1">Static Site Delivery</p>
+        <p className="text-sm text-muted-foreground">
+          In the Hestia static deployment, this form opens your local email client instead of posting to a server-side handler.
+        </p>
+      </div>
+
       <form
-        name="service-request"
-        method="POST"
-        data-netlify="true"
-        netlify-honeypot="bot-field"
         onSubmit={(e) => {
           e.preventDefault()
           const form = e.currentTarget
           const formData = new FormData(form)
-          fetch('/', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: new URLSearchParams(formData as unknown as Record<string, string>).toString(),
-          })
-            .then(() => setSubmitted(true))
-            .catch(() => {
-              window.alert('Form submission failed. Please try again in a few moments.')
-            })
+          const name = String(formData.get('name') ?? '')
+          const email = String(formData.get('email') ?? '')
+          const organization = String(formData.get('organization') ?? '')
+          const serviceType = String(formData.get('service_type') ?? '')
+          const scope = String(formData.get('scope') ?? '')
+          const message = String(formData.get('message') ?? '')
+          const subject = `[Automata Engineer] ${serviceType || 'Service Request'}`
+          const body = [
+            `Name: ${name}`,
+            `Email: ${email}`,
+            `Organization: ${organization || 'N/A'}`,
+            `Request Type: ${serviceType}`,
+            `Scope: ${scope || 'N/A'}`,
+            '',
+            'Details:',
+            message,
+          ].join('\n')
+
+          window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+          setSubmitted(true)
         }}
         className="space-y-6"
       >
-        <input type="hidden" name="form-name" value="service-request" />
-        <p hidden>
-          <label>Don't fill this out: <input name="bot-field" /></label>
-        </p>
-
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label htmlFor="name" className="block text-xs font-mono text-muted-foreground uppercase tracking-wider mb-2">
@@ -191,8 +202,8 @@ function Contact() {
           <div>
             <p className="text-xs font-mono text-muted-foreground uppercase tracking-wider mb-1">Alternative Contact</p>
             <p className="text-sm text-muted-foreground">
-              For urgent security matters or direct inquiries, reach out via the contact information on the full CV.
-              Request it using the form above with request type "CV Request".
+              For direct contact, email <a href={`mailto:${CONTACT_EMAIL}`} className="text-primary hover:opacity-80">{CONTACT_EMAIL}</a>.
+              If you later add a PHP mail handler in Hestia, this page can be switched from `mailto:` to a regular POST endpoint.
             </p>
           </div>
         </div>

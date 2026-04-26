@@ -9,26 +9,26 @@ export const Route = createFileRoute('/')({
 const highlights = [
   {
     icon: Network,
-    label: 'Network Infrastructure',
-    desc: 'SD-WAN, VLAN segmentation, BGP routing, Fortinet NGFW',
+    label: 'Network Support',
+    desc: 'TCP/IP troubleshooting, firewall basics, endpoint connectivity, infrastructure documentation',
     color: 'text-cyan-400',
   },
   {
     icon: Shield,
-    label: 'Cybersecurity',
-    desc: 'Zero Trust architecture, CIS Controls, SIEM/EDR, Wazuh',
+    label: 'Security Operations',
+    desc: 'CIS Controls participation, SIEM exposure, authentication support, practical security hardening',
     color: 'text-emerald-400',
   },
   {
     icon: Cloud,
-    label: 'Cloud & Virtualization',
-    desc: 'Hybrid cloud with Akamai, KVM/Proxmox, IaC with Terraform',
+    label: 'Systems & Platforms',
+    desc: 'Windows, Linux, macOS, Microsoft 365, server support, workstation deployment',
     color: 'text-violet-400',
   },
   {
     icon: Lock,
     label: 'Identity & Access',
-    desc: 'Zero Trust IAM, Passbolt, MFA, RBAC policy enforcement',
+    desc: 'Entra ID, MFA support, account provisioning, permissions, mailbox access',
     color: 'text-amber-400',
   },
 ]
@@ -62,18 +62,18 @@ function Home() {
                 <span className="text-primary ae-glow">Engineer</span>
               </h1>
               <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-4 max-w-2xl">
-                Hybrid professional portfolio, documentation hub, and service showcase
-                for enterprise networking, cybersecurity, and cloud solutions.
+                Professional portfolio focused on IT support, network administration,
+                Microsoft 365 operations, and security-minded infrastructure work.
               </p>
               <p className="text-sm text-muted-foreground font-mono mb-10">
-                // Zero Trust · CIS Controls · NIST Framework · Defense in Depth
+                // IT Support · Networking · Microsoft 365 · Security Operations
               </p>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-10 max-w-2xl">
                 {[
                   { label: 'Projects', value: String(allProjects.length) },
                   { label: 'Articles', value: String(allBlogs.length) },
                   { label: 'Roles', value: String(allJobs.length) },
-                  { label: 'Domains', value: '5' },
+                  { label: 'Platforms', value: '3' },
                 ].map((item) => (
                   <div key={item.label} className="border border-border rounded-lg bg-card/60 px-4 py-3">
                     <p className="text-lg font-mono font-bold text-primary">{item.value}</p>
@@ -242,9 +242,9 @@ function Home() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
-            { title: 'Zero Trust Architecture', points: ['Never trust, always verify', 'Least-privilege access', 'Micro-segmentation', 'Continuous monitoring'] },
-            { title: 'CIS Controls v8', points: ['Inventory & asset control', 'Data protection', 'Secure configuration', 'Audit log management'] },
-            { title: 'NIST Framework', points: ['Identify → Protect → Detect', 'Respond & Recover cycles', 'Risk-based prioritization', 'Continuous improvement'] },
+            { title: 'User Support', points: ['Clear troubleshooting flow', 'Fast issue isolation', 'Accurate ticket updates', 'Reliable follow-through'] },
+            { title: 'Security Practice', points: ['MFA and identity support', 'CIS Controls exposure', 'Security-aware documentation', 'Practical hardening'] },
+            { title: 'Infrastructure Growth', points: ['Home lab experimentation', 'Hybrid environment learning', 'Network administration practice', 'Continuous improvement'] },
           ].map(({ title, points }) => (
             <div key={title} className="border border-border rounded-lg p-6 bg-card">
               <h4 className="font-mono font-semibold text-primary mb-4 text-sm">{title}</h4>
@@ -267,7 +267,7 @@ function Home() {
           <Terminal className="text-primary mx-auto mb-4" size={32} />
           <h3 className="text-2xl font-bold font-mono text-foreground mb-3">Need a solution engineered?</h3>
           <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
-            From network redesigns to hybrid cloud rollouts and Zero Trust programs, this site now reflects the actual portfolio content in the repository.
+            This site reflects real experience in IT support, networking, Microsoft 365 administration, and security-focused infrastructure work.
           </p>
           <Link
             to="/contact"
