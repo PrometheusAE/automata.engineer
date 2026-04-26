@@ -1,12 +1,14 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
+import { allProjects } from 'content-collections'
+import { marked } from 'marked'
 import { useState } from 'react'
-import { Shield, Cloud, Wifi, ChevronDown, ChevronRight, AlertTriangle, CheckCircle, Target, BookOpen } from 'lucide-react'
+import { Shield, Cloud, Wifi, ChevronDown, ChevronRight, AlertTriangle, CheckCircle, Target, BookOpen, Download, ExternalLink } from 'lucide-react'
 
 export const Route = createFileRoute('/projects')({
   component: Projects,
 })
 
-const projects = [
+const projectDetails = [
   {
     id: 'zero-trust-network',
     icon: Shield,
@@ -146,10 +148,15 @@ HQ Site  Branch  Remote    Cloud workloads
   },
 ]
 
-function ProjectCard({ project }: { project: typeof projects[0] }) {
+const detailMap = Object.fromEntries(projectDetails.map((project) => [project.title, project]))
+
+type ContentProject = (typeof allProjects)[number]
+type ProjectWithDetails = ContentProject & { details: typeof projectDetails[0] }
+
+function ProjectCard({ project }: { project: ProjectWithDetails }) {
   const [expanded, setExpanded] = useState(false)
   const [activeTab, setActiveTab] = useState<'architecture' | 'steps' | 'outcomes'>('architecture')
-  const Icon = project.icon
+  const Icon = project.details.icon
 
   return (
     <div className="border border-border rounded-lg bg-card overflow-hidden ae-card-glow">
@@ -157,16 +164,16 @@ function ProjectCard({ project }: { project: typeof projects[0] }) {
         className="w-full text-left p-6 flex items-start gap-4"
         onClick={() => setExpanded(!expanded)}
       >
-        <Icon className={`${project.color} mt-0.5 shrink-0`} size={22} />
+        <Icon className={`${project.details.color} mt-0.5 shrink-0`} size={22} />
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between gap-4 mb-1">
             <h3 className="font-mono font-semibold text-foreground">{project.title}</h3>
             <div className="flex items-center gap-3">
-              <span className="text-xs px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 font-mono shrink-0">{project.status}</span>
+              <span className="text-xs px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 font-mono shrink-0">{project.details.status}</span>
               {expanded ? <ChevronDown size={16} className="text-muted-foreground shrink-0" /> : <ChevronRight size={16} className="text-muted-foreground shrink-0" />}
             </div>
           </div>
-          <p className="text-sm text-muted-foreground">{project.subtitle}</p>
+          <p className="text-sm text-muted-foreground">{project.details.subtitle}</p>
           <div className="flex flex-wrap gap-1.5 mt-3">
             {project.tags.map((t) => (
               <span key={t} className="text-xs px-2 py-0.5 rounded border border-border text-muted-foreground font-mono">{t}</span>
@@ -179,15 +186,23 @@ function ProjectCard({ project }: { project: typeof projects[0] }) {
         <div className="border-t border-border">
           {/* Overview */}
           <div className="p-6 pb-0">
-            <p className="text-sm text-muted-foreground leading-relaxed mb-4">{project.overview}</p>
+            <p className="text-sm text-muted-foreground leading-relaxed mb-4">{project.details.overview}</p>
             <div className="border border-border rounded-lg p-4 bg-background/50 mb-4">
               <div className="flex items-start gap-2">
                 <AlertTriangle size={14} className="text-amber-400 shrink-0 mt-0.5" />
                 <div>
                   <p className="text-xs font-mono text-amber-400 mb-1">Problem Statement</p>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{project.problem}</p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{project.details.problem}</p>
                 </div>
               </div>
+            </div>
+            <div className="border border-border rounded-lg p-4 bg-background/50 mb-4">
+              <p className="text-xs font-mono text-muted-foreground uppercase tracking-widest mb-2">Repository Summary</p>
+              <p className="text-sm text-muted-foreground leading-relaxed mb-3">{project.description}</p>
+              <div
+                className="prose-ae text-sm leading-relaxed"
+                dangerouslySetInnerHTML={{ __html: marked(project.content) }}
+              />
             </div>
           </div>
 
@@ -213,12 +228,12 @@ function ProjectCard({ project }: { project: typeof projects[0] }) {
           <div className="p-6">
             {activeTab === 'architecture' && (
               <pre className="text-xs font-mono text-primary/90 bg-background/60 border border-border rounded p-4 overflow-x-auto leading-relaxed whitespace-pre">
-                {project.architecture}
+                {project.details.architecture}
               </pre>
             )}
             {activeTab === 'steps' && (
               <ol className="space-y-3">
-                {project.steps.map((s, i) => (
+                {project.details.steps.map((s, i) => (
                   <li key={i} className="flex items-start gap-3 text-sm text-muted-foreground">
                     <span className="font-mono text-xs text-primary shrink-0 mt-0.5 w-5">{String(i + 1).padStart(2, '0')}.</span>
                     {s}
@@ -229,7 +244,7 @@ function ProjectCard({ project }: { project: typeof projects[0] }) {
             {activeTab === 'outcomes' && (
               <div className="space-y-4">
                 <ul className="space-y-2">
-                  {project.outcomes.map((o) => (
+                  {project.details.outcomes.map((o) => (
                     <li key={o} className="flex items-start gap-2 text-sm text-muted-foreground">
                       <CheckCircle size={14} className="text-emerald-400 shrink-0 mt-0.5" />
                       {o}
@@ -239,7 +254,7 @@ function ProjectCard({ project }: { project: typeof projects[0] }) {
                 <div className="border border-border rounded p-4 bg-background/50">
                   <p className="text-xs font-mono text-muted-foreground uppercase tracking-widest mb-2">Challenges Encountered</p>
                   <ul className="space-y-2">
-                    {project.challenges.map((c) => (
+                    {project.details.challenges.map((c) => (
                       <li key={c} className="flex items-start gap-2 text-sm text-muted-foreground">
                         <Target size={14} className="text-amber-400 shrink-0 mt-0.5" />
                         {c}
@@ -257,6 +272,21 @@ function ProjectCard({ project }: { project: typeof projects[0] }) {
 }
 
 function Projects() {
+  const projects = allProjects
+    .map((project) => {
+      const details = detailMap[project.title]
+
+      if (!details) {
+        return null
+      }
+
+      return {
+        ...project,
+        details,
+      }
+    })
+    .filter((project): project is ProjectWithDetails => project !== null)
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-12">
       <div className="mb-10">
@@ -267,9 +297,84 @@ function Projects() {
         </p>
       </div>
 
+      <section className="mb-10 border border-primary/20 rounded-xl bg-card overflow-hidden">
+        <div className="p-6 border-b border-border">
+          <p className="text-xs font-mono text-muted-foreground uppercase tracking-widest mb-2">Architecture Artifact</p>
+          <h2 className="text-2xl font-bold font-mono text-foreground mb-3">AE Infrastructure Network Diagram</h2>
+          <p className="text-sm text-muted-foreground leading-relaxed max-w-3xl">
+            Imported from the supplied `draw.io` PDF. The diagram maps a hybrid environment with dual WAN uplinks,
+            Cisco edge redundancy, segmented VLANs, FortiGate and pfSense firewalls, Tailscale overlay networking,
+            and identity services running across Dell-based virtualization hosts.
+          </p>
+        </div>
+
+        <div className="p-6 grid gap-6 lg:grid-cols-[1.3fr_0.9fr] items-start">
+          <a
+            href="/AEinfranetwork-drawio-1.2.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block border border-border rounded-lg overflow-hidden bg-background/40 hover:border-primary/40 transition-colors"
+          >
+            <img
+              src="/aeinfra-network-diagram.png"
+              alt="AE infrastructure network diagram"
+              className="w-full h-auto"
+            />
+          </a>
+
+          <div className="space-y-5">
+            <div>
+              <h3 className="text-xs font-mono text-muted-foreground uppercase tracking-widest mb-3">Key Observations</h3>
+              <ul className="space-y-2">
+                {[
+                  'Dual ISP edge with Cisco ISR4331 routers and HSRP virtual gateway at 192.168.100.1.',
+                  'Security boundary includes both FortiGate and pfSense, with cloud VPN links and Tailscale overlay addresses in the 100.x range.',
+                  'Segmentation is present across management and service VLANs, including 10, 20, 30 and 142 with 802.1Q subinterfaces.',
+                  'Core internal services include FreeIPA, Keycloak, CoreDNS, Passbolt, PostgreSQL and Prometheus.',
+                  'Compute appears to run on Dell R440 and R630 infrastructure with bridge-backed KVM/libvirt networking.',
+                ].map((item) => (
+                  <li key={item} className="flex items-start gap-2 text-sm text-muted-foreground">
+                    <CheckCircle size={14} className="text-primary shrink-0 mt-0.5" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="flex flex-wrap gap-3">
+              <Link
+                to="/network-diagram"
+                className="inline-flex items-center gap-2 px-4 py-2.5 bg-primary text-primary-foreground rounded font-mono text-sm font-semibold hover:opacity-90 transition-opacity"
+              >
+                <BookOpen size={14} />
+                Full Analysis
+              </Link>
+              <a
+                href="/AEinfranetwork-drawio-1.2.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2.5 border border-border text-foreground rounded font-mono text-sm hover:border-primary hover:text-primary transition-colors"
+              >
+                <Download size={14} />
+                Open PDF
+              </a>
+              <a
+                href="/aeinfra-network-diagram.png"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2.5 border border-border text-foreground rounded font-mono text-sm hover:border-primary hover:text-primary transition-colors"
+              >
+                <ExternalLink size={14} />
+                Open Preview
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <div className="space-y-4">
         {projects.map((p) => (
-          <ProjectCard key={p.id} project={p} />
+          <ProjectCard key={p._meta.path} project={p} />
         ))}
       </div>
     </div>

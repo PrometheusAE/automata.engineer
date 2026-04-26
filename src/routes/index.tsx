@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { Shield, Network, Cloud, Lock, Terminal, ArrowRight, Server, CheckCircle } from 'lucide-react'
-import { Badge } from '@/components/ui/badge'
+import { allBlogs, allJobs, allProjects } from 'content-collections'
+import { Shield, Network, Cloud, Lock, Terminal, ArrowRight, Server, CheckCircle, Calendar, Briefcase } from 'lucide-react'
 
 export const Route = createFileRoute('/')({
   component: Home,
@@ -33,28 +33,15 @@ const highlights = [
   },
 ]
 
-const featuredProjects = [
-  {
-    title: 'Zero Trust Network',
-    desc: 'End-to-end Zero Trust implementation with micro-segmentation, identity-aware proxies, and continuous verification.',
-    tags: ['Tailscale', 'Fortinet', 'Wazuh', 'CIS Controls'],
-    slug: 'zero-trust-network',
-  },
-  {
-    title: 'Hybrid Cloud Infrastructure',
-    desc: 'Akamai + on-premises hybrid cloud with automated provisioning, unified monitoring, and multi-region failover.',
-    tags: ['Akamai', 'KVM', 'Terraform', 'Zabbix'],
-    slug: 'hybrid-cloud-infrastructure',
-  },
-  {
-    title: 'Secure Remote Access',
-    desc: 'Modern VPN-less remote access using Tailscale mesh networking with centralized access policies.',
-    tags: ['Tailscale', 'Nextcloud', 'Passbolt', 'MFA'],
-    slug: 'secure-remote-access',
-  },
-]
-
 function Home() {
+  const featuredProjects = allProjects.slice(0, 3)
+  const recentPosts = [...allBlogs]
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .slice(0, 3)
+  const experience = [...allJobs]
+    .sort((a, b) => Number(b.startDate) - Number(a.startDate))
+    .slice(0, 2)
+
   return (
     <div className="min-h-screen">
       {/* Hero */}
@@ -81,6 +68,19 @@ function Home() {
               <p className="text-sm text-muted-foreground font-mono mb-10">
                 // Zero Trust · CIS Controls · NIST Framework · Defense in Depth
               </p>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-10 max-w-2xl">
+                {[
+                  { label: 'Projects', value: String(allProjects.length) },
+                  { label: 'Articles', value: String(allBlogs.length) },
+                  { label: 'Roles', value: String(allJobs.length) },
+                  { label: 'Domains', value: '5' },
+                ].map((item) => (
+                  <div key={item.label} className="border border-border rounded-lg bg-card/60 px-4 py-3">
+                    <p className="text-lg font-mono font-bold text-primary">{item.value}</p>
+                    <p className="text-[11px] uppercase tracking-widest text-muted-foreground">{item.label}</p>
+                  </div>
+                ))}
+              </div>
               <div className="flex flex-wrap gap-4">
                 <Link
                   to="/projects"
@@ -143,15 +143,90 @@ function Home() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {featuredProjects.map((p) => (
             <Link
-              key={p.slug}
+              key={p._meta.path}
               to="/projects"
               className="group border border-border rounded-lg p-6 bg-card hover:border-primary/50 transition-all ae-card-glow block"
             >
               <h4 className="font-mono font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">{p.title}</h4>
-              <p className="text-sm text-muted-foreground leading-relaxed mb-4">{p.desc}</p>
+              <p className="text-sm text-muted-foreground leading-relaxed mb-4">{p.description}</p>
               <div className="flex flex-wrap gap-1.5">
-                {p.tags.map((t) => (
+                {p.tags.slice(0, 4).map((t) => (
                   <span key={t} className="text-xs px-2 py-0.5 rounded border border-border text-muted-foreground font-mono">{t}</span>
+                ))}
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* Experience Snapshot */}
+      <section className="max-w-7xl mx-auto px-4 py-16 border-t border-border">
+        <div className="flex items-center justify-between mb-10">
+          <div>
+            <h2 className="text-xs font-mono text-muted-foreground uppercase tracking-widest mb-2">Experience</h2>
+            <h3 className="text-2xl font-bold font-mono text-foreground">Recent Roles</h3>
+          </div>
+          <Link
+            to="/about"
+            className="text-sm font-mono text-primary hover:opacity-80 transition-opacity flex items-center gap-1"
+          >
+            Full profile <ArrowRight size={14} />
+          </Link>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {experience.map((job) => (
+            <div key={job._meta.path} className="border border-border rounded-lg p-6 bg-card">
+              <div className="flex items-start justify-between gap-4 mb-3">
+                <div>
+                  <h4 className="font-mono font-semibold text-foreground">{job.jobTitle}</h4>
+                  <p className="text-sm text-primary">{job.company}</p>
+                </div>
+                <span className="text-xs font-mono text-muted-foreground border border-border rounded px-2 py-1">
+                  {job.startDate}{job.endDate ? ` - ${job.endDate}` : ' - Present'}
+                </span>
+              </div>
+              <p className="text-sm text-muted-foreground leading-relaxed mb-4">{job.summary}</p>
+              <div className="flex flex-wrap gap-1.5">
+                {job.tags.slice(0, 5).map((tag) => (
+                  <span key={tag} className="text-xs px-2 py-0.5 rounded border border-border text-muted-foreground font-mono">{tag}</span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Writing */}
+      <section className="max-w-7xl mx-auto px-4 py-16 border-t border-border">
+        <div className="flex items-center justify-between mb-10">
+          <div>
+            <h2 className="text-xs font-mono text-muted-foreground uppercase tracking-widest mb-2">Writing</h2>
+            <h3 className="text-2xl font-bold font-mono text-foreground">Latest Articles</h3>
+          </div>
+          <Link
+            to="/blog/"
+            className="text-sm font-mono text-primary hover:opacity-80 transition-opacity flex items-center gap-1"
+          >
+            Visit blog <ArrowRight size={14} />
+          </Link>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {recentPosts.map((post) => (
+            <Link
+              key={post._meta.path}
+              to="/blog/$slug"
+              params={{ slug: post._meta.path }}
+              className="group border border-border rounded-lg p-6 bg-card hover:border-primary/50 transition-all ae-card-glow"
+            >
+              <div className="flex items-center gap-2 text-xs text-muted-foreground font-mono mb-3">
+                <Calendar size={12} />
+                {new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+              </div>
+              <h4 className="font-mono font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">{post.title}</h4>
+              <p className="text-sm text-muted-foreground leading-relaxed mb-4">{post.summary}</p>
+              <div className="flex flex-wrap gap-1.5">
+                {post.tags.slice(0, 3).map((tag) => (
+                  <span key={tag} className="text-xs px-2 py-0.5 rounded border border-border text-muted-foreground font-mono">{tag}</span>
                 ))}
               </div>
             </Link>
@@ -192,7 +267,7 @@ function Home() {
           <Terminal className="text-primary mx-auto mb-4" size={32} />
           <h3 className="text-2xl font-bold font-mono text-foreground mb-3">Need a solution engineered?</h3>
           <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
-            From network redesigns to full security stack deployments — submit a service request and let's build it right.
+            From network redesigns to hybrid cloud rollouts and Zero Trust programs, this site now reflects the actual portfolio content in the repository.
           </p>
           <Link
             to="/contact"

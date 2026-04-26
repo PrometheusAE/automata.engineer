@@ -69,7 +69,11 @@ function Contact() {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: new URLSearchParams(formData as unknown as Record<string, string>).toString(),
-          }).then(() => setSubmitted(true))
+          })
+            .then(() => setSubmitted(true))
+            .catch(() => {
+              window.alert('Form submission failed. Please try again in a few moments.')
+            })
         }}
         className="space-y-6"
       >

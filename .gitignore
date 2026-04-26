@@ -1,0 +1,12 @@
+# Dependencies
+node_modules
+
+# Build outputs
+dist
+
+# Generated app artifacts
+.content-collections
+src/routeTree.gen.ts
+
+# Local Netlify folder
+.netlify

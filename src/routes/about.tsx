@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { allEducations, allJobs } from 'content-collections'
 import { Award, Code2, Download } from 'lucide-react'
-import { Badge } from '@/components/ui/badge'
 
 export const Route = createFileRoute('/about')({
   component: About,
@@ -24,31 +24,10 @@ const techStack: { category: string; items: string[] }[] = [
   { category: 'Observability', items: ['Zabbix', 'Prometheus', 'Grafana', 'Netbox', 'ELK Stack'] },
 ]
 
-const experience = [
-  {
-    title: 'Senior Network & Security Engineer',
-    company: 'Automata Systems',
-    period: '2022 — Present',
-    summary: 'Lead architect for Zero Trust network transformation. Designed and deployed hybrid cloud infrastructure, SIEM/XDR platform, and organization-wide CIS Controls implementation.',
-    tags: ['Fortinet', 'Tailscale', 'Wazuh', 'Proxmox', 'Terraform'],
-  },
-  {
-    title: 'Network Engineer',
-    company: 'Infrastructure Works Ltd.',
-    period: '2019 — 2022',
-    summary: 'Managed multi-site enterprise networks across 8 locations. Implemented SD-WAN overlay, network access control, and first-generation SIEM deployment.',
-    tags: ['Cisco', 'FortiGate', 'OSPF', '802.1X', 'Splunk'],
-  },
-  {
-    title: 'Systems Administrator',
-    company: 'TechBase Solutions',
-    period: '2017 — 2019',
-    summary: 'Linux and Windows server administration, virtualization (VMware ESXi), backup management, and network monitoring.',
-    tags: ['Linux', 'VMware', 'Bash', 'Zabbix', 'Active Directory'],
-  },
-]
-
 function About() {
+  const experience = [...allJobs].sort((a, b) => Number(b.startDate) - Number(a.startDate))
+  const education = [...allEducations].sort((a, b) => Number(b.startDate) - Number(a.startDate))
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-12">
       <div className="mb-12">
@@ -108,18 +87,44 @@ function About() {
         <h2 className="text-xs font-mono text-muted-foreground uppercase tracking-widest mb-4">Experience</h2>
         <div className="space-y-4">
           {experience.map((job) => (
-            <div key={job.title} className="border border-border rounded-lg p-5 bg-card">
+            <div key={job._meta.path} className="border border-border rounded-lg p-5 bg-card">
               <div className="flex items-start justify-between gap-4 mb-2">
                 <div>
-                  <h3 className="font-mono font-semibold text-foreground text-sm">{job.title}</h3>
-                  <p className="text-xs text-muted-foreground">{job.company}</p>
+                  <h3 className="font-mono font-semibold text-foreground text-sm">{job.jobTitle}</h3>
+                  <p className="text-xs text-muted-foreground">{job.company} · {job.location}</p>
                 </div>
-                <span className="text-xs font-mono text-muted-foreground shrink-0 border border-border px-2 py-0.5 rounded">{job.period}</span>
+                <span className="text-xs font-mono text-muted-foreground shrink-0 border border-border px-2 py-0.5 rounded">
+                  {job.startDate} — {job.endDate ?? 'Present'}
+                </span>
               </div>
               <p className="text-sm text-muted-foreground leading-relaxed mb-3">{job.summary}</p>
               <div className="flex flex-wrap gap-1.5">
                 {job.tags.map((t) => (
                   <span key={t} className="text-xs px-2 py-0.5 rounded border border-border text-muted-foreground font-mono">{t}</span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="mb-10">
+        <h2 className="text-xs font-mono text-muted-foreground uppercase tracking-widest mb-4">Education & Training</h2>
+        <div className="space-y-4">
+          {education.map((entry) => (
+            <div key={entry._meta.path} className="border border-border rounded-lg p-5 bg-card">
+              <div className="flex items-start justify-between gap-4 mb-2">
+                <div>
+                  <h3 className="font-mono font-semibold text-foreground text-sm">{entry.school}</h3>
+                  <p className="text-sm text-muted-foreground">{entry.summary}</p>
+                </div>
+                <span className="text-xs font-mono text-muted-foreground shrink-0 border border-border px-2 py-0.5 rounded">
+                  {entry.startDate}{entry.endDate ? ` — ${entry.endDate}` : ''}
+                </span>
+              </div>
+              <div className="flex flex-wrap gap-1.5 mt-3">
+                {entry.tags.map((tag) => (
+                  <span key={tag} className="text-xs px-2 py-0.5 rounded border border-border text-muted-foreground font-mono">{tag}</span>
                 ))}
               </div>
             </div>

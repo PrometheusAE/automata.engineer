@@ -1,6 +1,6 @@
 import { HeadContent, Scripts, createRootRoute, Link } from '@tanstack/react-router'
 import { useState } from 'react'
-import { Menu, X, Terminal, Shield, Server, BookOpen, Wrench, User, Mail } from 'lucide-react'
+import { Menu, X, Terminal, Shield, Server, BookOpen, Wrench, User, Mail, PenSquare, Network } from 'lucide-react'
 import '../styles.css'
 
 export const Route = createRootRoute({
@@ -8,8 +8,8 @@ export const Route = createRootRoute({
     meta: [
       { charSet: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { title: 'Automata Engineer' },
-      { name: 'description', content: 'Network, Cybersecurity & Cloud Solutions' },
+      { title: 'Automata Engineer | Network, Security & Hybrid Cloud' },
+      { name: 'description', content: 'Engineering portfolio and service site focused on network infrastructure, cybersecurity, Zero Trust, and hybrid cloud operations.' },
     ],
   }),
   shellComponent: RootDocument,
@@ -19,6 +19,8 @@ const navItems = [
   { to: '/', label: 'Home', icon: Terminal },
   { to: '/solutions', label: 'Solutions', icon: Server },
   { to: '/projects', label: 'Projects', icon: Shield },
+  { to: '/network-diagram', label: 'Infra Map', icon: Network },
+  { to: '/blog/', label: 'Blog', icon: PenSquare },
   { to: '/docs', label: 'Docs', icon: BookOpen },
   { to: '/tools', label: 'Tools', icon: Wrench },
   { to: '/about', label: 'About', icon: User },
@@ -78,6 +80,8 @@ function NavBar() {
 }
 
 function RootDocument({ children }: { children: React.ReactNode }) {
+  const year = new Date().getFullYear()
+
   return (
     <html lang="en" className="dark">
       <head>
@@ -92,7 +96,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <img src="/logo.png" alt="Automata Engineer" className="h-10 w-10 object-contain opacity-80" />
-              <span className="font-mono text-xs text-muted-foreground">© 2025 AUTOMATA ENGINEER — Network, Security & Cloud</span>
+              <span className="font-mono text-xs text-muted-foreground">© {year} AUTOMATA ENGINEER — Network, Security & Cloud</span>
             </div>
             <span className="font-mono text-xs text-muted-foreground">Zero Trust · CIS Controls · NIST Framework</span>
           </div>
